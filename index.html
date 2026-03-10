@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Canteen Demand Predictor</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-utensils"></i> Smart Canteen
+        </div>
+        <nav>
+            <button id="nav-home" class="nav-btn active"><i class="fa-solid fa-house"></i> Home</button>
+            <button id="nav-predict" class="nav-btn"><i class="fa-solid fa-chart-line"></i> Predict</button>
+            <button id="nav-menu" class="nav-btn"><i class="fa-solid fa-bowl-food"></i> Menu Items</button>
+            <button id="nav-about" class="nav-btn"><i class="fa-solid fa-circle-info"></i> About Us</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home-section" class="active-section">
+            <div class="hero">
+                <h1>Predict Canteen Food Demand accurately.</h1>
+                <p>Welcome to the <strong>Smart Canteen Demand Predictor</strong>. Designed to help canteen managers effortlessly calculate how many meals to prepare, reducing both food waste and shortages.</p>
+                <div class="hero-buttons">
+                    <button class="primary-btn large-btn" id="start-prediction-btn">
+                        <i class="fa-solid fa-play"></i> Start Prediction
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="card">
+                    <i class="fa-solid fa-triangle-exclamation card-icon text-orange"></i>
+                    <h2>The Problem</h2>
+                    <p>Canteens often struggle to know exactly how much food to cook. Cooking too much leads to <strong>food waste</strong>, while cooking too little leads to <strong>food shortages</strong> and unhappy customers.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-lightbulb card-icon text-yellow"></i>
+                    <h2>The Solution</h2>
+                    <p>Our intelligent system uses a rule-based algorithm considering the day, meal time, weather, and special events to provide a reliable <strong>estimation of food demand</strong>.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-leaf card-icon text-green"></i>
+                    <h2>The Benefits</h2>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Save money on ingredients</li>
+                        <li><i class="fa-solid fa-check"></i> Protect the environment</li>
+                        <li><i class="fa-solid fa-check"></i> Ensure everyone gets a meal</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prediction Section -->
+        <section id="predict-section" class="hidden-section">
+            <div class="prediction-container">
+                <div class="form-card">
+                    <h2><i class="fa-solid fa-clipboard-question"></i> Enter Details for Today's Meal</h2>
+                    <p class="helper-text">Please fill out the simple form below to get a prediction.</p>
+                    
+                    <form id="prediction-form">
+                        <div class="form-group" title="Select which day of the week it is. Weekends generally have different demand than weekdays.">
+                            <label for="dayOfWeek"><i class="fa-regular fa-calendar"></i> Day of the Week</label>
+                            <select id="dayOfWeek" required>
+                                <option value="" disabled selected>Select a day...</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                            <small class="tooltip-text">E.g., Fridays might have more guests!</small>
+                        </div>
+
+                        <div class="form-group" title="Select the meal time. Lunch is usually the busiest.">
+                            <label for="mealTime"><i class="fa-regular fa-clock"></i> Meal Time</label>
+                            <select id="mealTime" required>
+                                <option value="" disabled selected>Select a meal...</option>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                            </select>
+                            <small class="tooltip-text">Lunch is usually the busiest.</small>
+                        </div>
+
+                        <div class="form-group" title="Select today's weather. Rainy days can make people stay indoors and eat at the canteen.">
+                            <label for="weather"><i class="fa-solid fa-cloud-sun"></i> Weather Condition</label>
+                            <select id="weather" required>
+                                <option value="" disabled selected>Select weather...</option>
+                                <option value="Sunny">Sunny ☀️</option>
+                                <option value="Cloudy">Cloudy ☁️</option>
+                                <option value="Rainy">Rainy 🌧️</option>
+                            </select>
+                            <small class="tooltip-text">Bad weather often keeps people inside to eat.</small>
+                        </div>
+
+                        <div class="form-group" title="Is there a special event today, like a conference or meeting?">
+                            <label for="event"><i class="fa-solid fa-star"></i> Special Event?</label>
+                            <select id="event" required>
+                                <option value="" disabled selected>Select yes or no...</option>
+                                <option value="No">No Event</option>
+                                <option value="Yes">Yes, Special Event</option>
+                            </select>
+                            <small class="tooltip-text">Events usually bring extra guests.</small>
+                        </div>
+
+                        <button type="submit" class="primary-btn large-btn full-width">
+                            <i class="fa-solid fa-calculator"></i> Predict Demand
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Area (Hidden initially) -->
+                <div id="results-card" class="result-card hidden-section">
+                    <h2><i class="fa-solid fa-chart-pie"></i> Prediction Results</h2>
+                    
+                    <div class="result-highlight">
+                        <span class="result-number" id="predicted-number">0</span>
+                        <span class="result-label">Meals</span>
+                    </div>
+                    
+                    <div class="message-box">
+                        <p id="friendly-message">Recommended food preparation for today is approximately 0 meals.</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="demandChart"></canvas>
+                    </div>
+
+                    <button id="recalculate-btn" type="button" class="secondary-btn">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> Calculate Again
+                    </button>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu-section" class="hidden-section">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-bowl-food"></i> Popular Menu Items</h2>
+                <p>Easily identify our most requested dishes to help adjust your stock.</p>
+            </div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <img src="assets/rice_dish_1773135746471.png" alt="Rice Dish">
+                    <h3>Healthy Veggie Bowl</h3>
+                    <p>Usually high demand at lunch. Packed with nutrition!</p>
+                </div>
+                <div class="food-card">
+                    <img src="assets/pasta_dish_1773135763205.png" alt="Pasta">
+                    <h3>Creamy Pasta</h3>
+                    <p>Popular during cloudy or rainy days.</p>
+                </div>
+                <div class="food-card">
+                    <img src="assets/sandwich_snack_1773135784564.png" alt="Sandwich">
+                    <h3>Fresh Sandwich</h3>
+                    <p>Great for quick morning snacks or late afternoon tea.</p>
+                </div>
+                <div class="food-card">
+                    <img src="assets/fresh_salad_1773135806988.png" alt="Salad">
+                    <h3>Green Salad</h3>
+                    <p>High demand on warmer sunny days.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about-section" class="hidden-section">
+            <div class="about-container">
+                <h2><i class="fa-solid fa-circle-info"></i> About Us</h2>
+                <div class="about-content">
+                    <p><strong>Smart Canteen Demand Predictor</strong> was created with a singular mission: to make canteen management sustainable, easy, and stress-free.</p>
+                    <p>Every year, thousands of tons of perfectly good food go to waste simply because it's difficult to predict how many people will eat at the canteen on a given day. Weather, day of the week, and special events all play a part.</p>
+                    <p>Our goal is to help modern and traditional canteens take the guesswork out of their kitchen. This tool was designed specifically so that anyone, regardless of technical skill, can open the website, enter a few details, and get a reliable recommendation.</p>
+                    <div class="about-highlight">
+                        <h3><i class="fa-solid fa-bullseye text-orange"></i> Our Vision</h3>
+                        <p>Zero food waste across local communities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Smart Canteen Demand Predictor. Designed for Everyone.</p>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container">
+        <button id="chatbot-toggle" class="chatbot-toggle" title="Ask clearly for help!">
+            <i class="fa-solid fa-comments"></i>
+        </button>
+        <div id="chatbot-window" class="chatbot-window hidden">
+            <div class="chatbot-header">
+                <h3><i class="fa-solid fa-robot"></i> Canteen Assistant</h3>
+                <button id="chatbot-close" title="Close chat"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-msg">Hello! I am your AI aide. Ask me about how to use this site, food items, or reducing waste.</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chat-input" placeholder="Type your doubt here...">
+                <button id="chat-send" title="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
